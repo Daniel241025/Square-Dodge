@@ -1,0 +1,9 @@
+class GameConfig:
+    SCREEN_WIDTH = 500
+    SCREEN_HEIGHT = 500
+    FPS = 60
+    PLAYER_SPEED = 5
+    BASE_ENEMY_SPEED = 3
+    MAX_ENEMIES = 12
+    LEVEL_UP_SCORE = 300
+    COLLISION_BUFFER = -2
