@@ -65,14 +65,18 @@ class Game:
                 return False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    return False
+                # Se estiver no game over, ESC volta para o menu
+                    if self.state == GameState.GAME_OVER:
+                        return "MENU"  # Sinal para voltar ao menu
+                    else:
+                        return False  # Sair do jogo normalmente
                 if event.key == pygame.K_SPACE and self.state == GameState.GAME_OVER:
                     self.reset_game()
                 if event.key == pygame.K_p and self.state == GameState.RUNNING:
                     self.state = GameState.PAUSED
                 elif event.key == pygame.K_p and self.state == GameState.PAUSED:
                     self.state = GameState.RUNNING
-        
+    
         return True
     
     def update(self):
@@ -200,11 +204,11 @@ class Game:
         overlay = pygame.Surface((self.config.SCREEN_WIDTH, self.config.SCREEN_HEIGHT), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 180))
         self.window.blit(overlay, (0, 0))
-        
+    
         game_over_text = self.big_font.render("GAME OVER", True, (255, 50, 50))
         score_text = self.font.render(f"Final Score: {self.stats.score}", True, (255, 255, 255))
-        restart_text = self.font.render("Press SPACE to restart or ESC to quit", True, (200, 200, 200))
-        
+        restart_text = self.font.render("Press SPACE to restart or ESC to return to menu", True, (200, 200, 200))
+    
         self.window.blit(game_over_text, game_over_text.get_rect(center=(self.config.SCREEN_WIDTH//2, self.config.SCREEN_HEIGHT//2 - 50)))
         self.window.blit(score_text, score_text.get_rect(center=(self.config.SCREEN_WIDTH//2, self.config.SCREEN_HEIGHT//2)))
         self.window.blit(restart_text, restart_text.get_rect(center=(self.config.SCREEN_WIDTH//2, self.config.SCREEN_HEIGHT//2 + 50)))
@@ -223,9 +227,16 @@ class Game:
     def run(self):
         running = True
         while running:
-            running = self.handle_events()
+            result = self.handle_events()
+        
+            if result == "MENU":
+                return "MENU"  # Sinal para voltar ao menu
+            elif result is False:
+                break
+            
             self.update()
             self.render()
             self.clock.tick(self.config.FPS)
-        
+    
         pygame.quit()
+        return "EXIT"

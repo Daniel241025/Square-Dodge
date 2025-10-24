@@ -72,7 +72,8 @@ class Menu:
             button.draw(surface)
         
         # Instruções
-        info_text = info_font.render("ESC: Menu | P: Pausar | SPACE: Reiniciar", True, (180, 180, 180))
+       # No método draw() da classe Menu, mude a linha das instruções para:
+        info_text = info_font.render("ESC: Menu/Voltar | P: Pausar | SPACE: Reiniciar", True, (180, 180, 180))
         info_rect = info_text.get_rect(center=(SCREEN_WIDTH//2, SCREEN_HEIGHT - 30))
         surface.blit(info_text, info_rect)
 
@@ -121,8 +122,14 @@ def main():
             
             # Criar e executar o jogo
             game = Game()
-            game.run()
+            result = game.run()
             
+            # Se o jogo retornou "MENU", continuamos no loop para mostrar o menu novamente
+            if result == "MENU":
+                continue
+            else:
+                break  # Sair do jogo completamente
+                
         except ImportError as e:
             print(f"Erro: Não foi possível carregar o jogo - {e}")
             break
