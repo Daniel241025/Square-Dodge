@@ -135,8 +135,11 @@ class Game:
         self.state = GameState.GAME_OVER
         if self.stats.score > self.stats.highscore:
             self.stats.highscore = self.stats.score
-        
-        # Adicionar efeito de partículas
+    
+    # SALVAR NO BANCO DE DADOS - NOVA LINHA ADICIONADA
+        self.stats.save_to_database()
+    
+    # Adicionar efeito de partículas
         self.particle_system.add_explosion(
             self.player.rect.centerx,
             self.player.rect.centery,
